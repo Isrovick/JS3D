@@ -1,0 +1,94 @@
+vec3 I_ambient=source_ambient_color*mat_ambient_color;\n\
+vec3 I_diffuse=source_diffuse_color*mat_diffuse_color*max(0., dot(vNormal, source_direction));\n\
+vec3 I_specular=source_specular_color*mat_specular_color*pow(max(dot(R,V),0.), mat_shininess);\n\
+vec3 I=I_ambient+I_diffuse+I_specular;\n\
+
+const vec3 source_ambient_color=vec3(1.,1.,1.);\n\
+const vec3 source_diffuse_color=vec3(1.,2.,4.);\n\
+const vec3 source_specular_color=vec3(1.,1.,1.);\n\
+const vec3 source_direction=vec3(0.,0.,1.);\n\
+
+GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.position"),[0.02550000000000002,0.025500000000000016,0.00425]);
+       //ax: 0 ay: 0.01999999999999997az: -0.004999999999999957
+       //ax: 0.02550000000000002 ay: -0.025500000000000016az: 0.00425
+       //ax: 0.1673407862997531 ay: -0.05000000000000003az: -0.07535714038246799
+       GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.ambient"), [ax,ay,az] );
+       GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.diffuse"), [ax,ay,az]);
+       GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.specular"), [ax,ay,az]);
+                                                 // ax: 0.13000000000000003 ay: 6.209999999999912az: 0.5150000000000003
+       //GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.constant"), [0.13000000000000003]);
+       //GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.linear"), [6.209999999999912]);
+       //GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLights.quadratic"), [0.5150000000000003]);
+
+
+       /*
+  GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.position"),[0.02550000000000002,0.025500000000000016,0.00425]);
+  GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.ambient"), [0.9, 0.9, 0.9] );
+  GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.diffuse"), [0.8, 0.8, 0.8]);
+  GL.uniform3fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.specular"), [1.0, 1.0, 1.0]);
+  GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.constant"), [0.01]);
+  GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.linear"), [0.09]);
+  GL.uniform1fv(GL.getUniformLocation(SHADER_PROGRAM, "pointLight3.quadratic"), [0.032]);
+*/
+
+/*cx: 2.3935528717451726  cz: 0.13785260122760135
+cx: 8.07235744489626    cz: -0.2098042893893301
+cx: 3.395282145635875  cz: 1.2311177655795584
+
+cx: 1.0400000000000003  cz: 6.0400000000000045
+cx: -1.2773219420699413  cz: 6.0965958693248465
+cx: -0.19538436113588675  cz: 8.400686786853692
+
+//cx: 4.347809649159619  cz: 1.2531126689233951
+//cx: 6.898625077768134  cz: 4.119651474881082
+
+cx: 7.131898993140092  cz: 4.320034125346316
+cx: 6.985377529143586  cz: 8.744052026466257
+cx: 7.040023231687122  cz: 9.302494977778155
+
+cx: 8.005436621824176  cz: 12.34155598191235
+cx: -5.786804416118299  cz: 12.658507995853501
+
+cx: -6.326856886259385  cz: 15.316302829928587 in corner
+cx: -6.700389041057436  cz: 15.17321638985853 out corner
+
+cx: 8.614151155645398  cz: 11.124800583875489 out
+cx: 7.703577838857385  cz: 12.093746523932847
+
+cx: -1.0086520710903  cz: -0.13749616783686508
+ cx: -1.6026681236505975  cz: 2.265825906399787
+
+cx: -1.6026681236505975  cz: 2.265825906399787
+
+cx: -9.519999999999973  cz: 6.640000000000005
+cx: -11.064663218361401  cz: 9.132867676577224
+
+*/
+
+var ax=0,ay=0,az=0;
+
+ /*jshint multistr: true */
+
+  var qx=0,qy=0,qz=0;
+
+       //if(e.keyCode==75){alert("cx: "+cx+" cy: "+cy+"cz: "+cz+"Qx: "+qx+" Qy: "+qy+"Qz: "+qz);}  
+     //if(e.keyCode==75){alert("cx "+cx+"cy "+cy+"cz "+cz);}; 
+     if(e.keyCode==75){alert("cx: "+cx+"  cz: "+cz);}; 
+
+
+
+     LIBS.get_json("./ressources/stage_1.json", function(stage){
+    //vertices
+    CUBE_VERTEX= GL.createBuffer ();
+    GL.bindBuffer(GL.ARRAY_BUFFER, CUBE_VERTEX);
+    GL.bufferData(GL.ARRAY_BUFFER,
+                  new Float32Array(stage.vertices),
+      GL.STATIC_DRAW);
+    //faces
+    CUBE_FACES=GL.createBuffer ();
+    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, CUBE_FACES);
+    GL.bufferData(GL.ELEMENT_ARRAY_BUFFER,
+                  new Uint32Array(stage.indices),
+      GL.STATIC_DRAW);
+    CUBE_NPOINTS=stage.indices.length;
+    animate();
